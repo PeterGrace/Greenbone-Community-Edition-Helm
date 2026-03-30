@@ -4,13 +4,19 @@
 hostname: openvas.example.com
 
 psgvm:
+  POSTGRES_VERSION: "17"
   image:
     repository: registry.community.greenbone.net/community/pg-gvm
-    tag: stable
+    tag: 22.6.13
+  persistence:
+    enabled: true
+    storageClass: "default"
+    accessMode: ReadWriteOnce
+    size: 50Gi
 ospd:
   image:
     repository: registry.community.greenbone.net/community/ospd-openvas
-    tag: edge
+    tag: stable
 
 #  4  Errors.
 #  8  Critical situation.
@@ -80,7 +86,8 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: "openvas-serviceaccount"
 
-podAnnotations: {}
+podAnnotations:
+  reloader.stakater.com/auto: "true"
 
 podSecurityContext: 
   runAsUser: 0
