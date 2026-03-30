@@ -141,7 +141,7 @@ spec:
             - name: shared-storage
               mountPath: /var/log/openvas
               subPath: openvas-log-data
-          command: ["/bin/sh", "-c", "printf \"table_driven_lsc = yes\nopenvasd_server = http://openvasd:80\n\" > /mnt/openvas.conf && sed \"s/127/{{ .Values.logLevel }}/\" /etc/openvas/openvas_log.conf | sed 's/gvm/openvas/' > /mnt/openvas_log.conf && chmod 644 /mnt/openvas.conf && chmod 644 /mnt/openvas_log.conf && touch /var/log/openvas/openvas.log && chmod 666 /var/log/openvas/openvas.log"]
+          command: ["/bin/sh", "-c", "printf \"table_driven_lsc = yes\nopenvasd_server = http://openvasd:9391\n\" > /mnt/openvas.conf && sed \"s/127/{{ .Values.logLevel }}/\" /etc/openvas/openvas_log.conf | sed 's/gvm/openvas/' > /mnt/openvas_log.conf && chmod 644 /mnt/openvas.conf && chmod 644 /mnt/openvas_log.conf && touch /var/log/openvas/openvas.log && chmod 666 /var/log/openvas/openvas.log"]
           securityContext:
             {{- toYaml .Values.podSecurityContext | nindent 12 }}
 
@@ -221,7 +221,7 @@ spec:
           image: registry.community.greenbone.net/community/gsa:stable
           imagePullPolicy: Always
           ports:
-            - containerPort: 80
+            - containerPort: 9392
               protocol: TCP
           volumeMounts:
             - name: gvmd-socket
@@ -245,7 +245,7 @@ spec:
           image: registry.community.greenbone.net/community/openvas-scanner:stable
           imagePullPolicy: Always
           ports:
-            - containerPort: 81
+            - containerPort: 9391
               protocol: TCP
           env:
             - name: OPENVASD_MODE
@@ -253,7 +253,7 @@ spec:
             - name: GNUPGHOME
               value: "/etc/openvas/gnupg"
             - name: LISTENING
-              value: "0.0.0.0:81"
+              value: "0.0.0.0:9391"
           volumeMounts:
             - name: openvas-storage
               mountPath: /etc/openvas
